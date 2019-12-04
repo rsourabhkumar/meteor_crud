@@ -1,0 +1,20 @@
+header {
+    background: rgb(73, 176, 236);
+    display: flex;
+    align-items: center;
+    }
+    header h1 {
+    font-style: italic;
+    font-weight: 600;
+    color: whitesmoke;
+    }
+    header a {
+    font-size: 2em;
+    margin: 0 20px;
+    color: whitesmoke;
+    }
+    .user-area {
+    flex: 4;
+    margin-right: 20px;
+    text-align: right;
+    }
