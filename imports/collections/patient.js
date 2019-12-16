@@ -14,17 +14,15 @@ Meteor.methods({
       createdAt: new Date(),
       name: name,
       age: age,
-      disease: disease
+      disease: disease,
+      ownerId: this.userId
     });
   },
   
   'patient.update': function(patient,name,age,disease) {
-    return Patients.upadate(patient._id,{$set:{name:name,age:age,disease:disease}});
+    return Patients.update(patient._id,{$set:{name:name,age:age,disease:disease}});
   },
-  // 'patient.update': function(patient,disease) {
-  //   return Patients.upadateOne(patient._id, { $set: { disease:disease } });
-  // },
-
+ 
   'patients.remove': function(patient) {
     return Patients.remove(patient);
   }

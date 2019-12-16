@@ -1,62 +1,59 @@
-import React,{Component} from 'react'
-import { Meteor } from 'meteor/meteor';
-import { withTracker } from 'meteor/react-meteor-data';
-import  {Patients}  from '../../../imports/collections/patient';
-class Update_patient extends Component{
+import React,{useState,useEffect} from 'react'
+import propType from'prop-types'
 
-    state={
-        patient:{name:'',age:'',disease:''}
-      }
-      componentDidUpdate(prevProps){
-          if(this.props.patient.name!=prevProps.patient.name){
-            const patient1={name:this.props.patient.name,
-                age:this.props.patient.age,
-                disease:this.props.patient.disease}
-              this.setState({
-                  patient:patient1
-              })
-              console.log(patient1);
-          }
-      }
-    nameInput=React.createRef();
-    ageInput=React.createRef();
-    diseaseInput=React.createRef();
-    updatePatient=(e)=>{
+function Update_patient(props){
+
+    const [patient,setPatient]=useState({name:'',age:'',disease:''})
+
+    useEffect(() => {
+        if(!props.patient){
+            setPatient({ ...patient, name:'', age:'', disease: '' })
+        }else{
+            setPatient({ ...patient, name: props.patient.name, age: props.patient.age, disease: props.patient.disease }) 
+        }
+        
+	}, [props.patient])
+
+    let nameInput=React.createRef();
+   let ageInput=React.createRef();
+   let diseaseInput=React.createRef();
+     const updatePatient=(e)=>{
         e.preventDefault()
-        const name=this.nameInput.current.value
-        const age=this.ageInput.current.value
-        const disease=this.diseaseInput.current.value
-        Meteor.call('patients.upadate', this.props.patient ,name, age,disease);
+        const name=nameInput.current.value
+        const age=ageInput.current.value
+        const disease=diseaseInput.current.value
+        // Meteor.call('patient.update', props.patient ,name, age,disease);
+        props.updatePatient('patient.update', props.patient ,name, age,disease)
+        props.history.push('/');
     }
-    render(){
-        if (!this.props.patient) { return <div>Loading...</div>; }
         return(
-            <div>
-        <form onSubmit={this.updatePatient} className="update-patient">
-            <div>
-            <br/>
-                 Name: <input type="text" value={this.state.patient.name} name="name" ref={this.nameInput}></input><br/>
-                 Age: <input type="text" name="age" value={this.state.patient.age} ref={this.ageInput}></input><br/>
-                 Disease: <input type="text" name="disease" value={this.state.patient.disease} ref={this.diseaseInput}></input><br/>
-                 <button type="submit">Update</button>
-            </div>
-        </form> 
-            </div>
+            <div className="patient-container">
+            <div className="item">
+            <form onSubmit={updatePatient} className="create-patient">
+             <div className="child-item">         
+                  Name: <input type="text" defaultValue={patient.name}  name="name" ref={nameInput}></input>
+             </div>
+             <div className="child-item">         
+             Age: <input type="text" defaultValue={patient.age} name="age" ref={ageInput}></input>
+             </div>
+             <div className="child-item">         
+             Disease: <input type="text" defaultValue={patient.disease} name="disease" ref={diseaseInput}></input>
+             </div>
+             <div className="child-item">         
+             <button data-test="update-button" type="submit">Update</button>
+                 {console.log(patient)}
+             </div>
+         </form> 
+         {/* <a href="/" style={{backgroundColor:label}} >&times;</a> */}
+         </div>
+     </div>
         )
-    }
 }
-// export default Update_patient
 
-export default withTracker((props) => {
-    const patientId =props.match.params.patientId
-    const patientsHandle = Meteor.subscribe('patients');
-    const loading = !patientsHandle.ready();
-    const list = Patients.findOne(patientId);
-    const listExists = !loading && !!list;
-    return {
-      loading,
-      list,
-      listExists,
-      patient: listExists ? list: [],
-    };
-  })(Update_patient);
+Update_patient.propType={
+    patient:propType.object,
+    loading:propType.bool,
+    updatePatient:propType.func
+  }
+
+export default Update_patient

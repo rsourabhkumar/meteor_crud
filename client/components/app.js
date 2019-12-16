@@ -1,4 +1,6 @@
 import React,{Component} from 'react';
+import containpatientlist from './container/containpatientlist'
+import ContainUpdatePatient from './container/containpatientUpdate'
 import Header from './header'
 import Patients_Create from'./patients/patients_create'
 import Patients_List from'./patients/patients_list'
@@ -19,9 +21,9 @@ class App extends Component{
        <BrowserRouter>
          <Header/>
          <Switch>
-           <Route exact path="/" component={Patients_List}/>
+           <Route exact path="/" component={containpatientlist}/>
            <Route exact path="/patient" component={Patients_Create}/>
-       <Route exact path="/patients/:patientId" component={Update_patient} />)}/>
+       <Route exact path="/patients/:patientId" component={ContainUpdatePatient} />
    </Switch>
    </BrowserRouter>
      </div>

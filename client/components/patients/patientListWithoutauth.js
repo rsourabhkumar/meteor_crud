@@ -1,13 +1,11 @@
 import React, { Component,useState,useEffect } from 'react';
-import propType from'prop-types'
 
 function Patients_List(props){
 
-  const [isAuthenticated,setuser]=useState(props.currentUser !== null)
   const [patients,setPatients]=useState([{}])
 
   useEffect(() => {
-      if(props.patients.length==0){
+      if(!props.patients){
         setPatients([{}])
       }else{
         setPatients(props.patients) 
@@ -15,18 +13,13 @@ function Patients_List(props){
       
 }, [props.patients])
 
-  const onPatientRemove=(patient)=> {
-    // Meteor.call('patients.remove', patient);
-    props.patientRemove(patient);
-  }
-
 const renderPatients=()=> {
     return patients.map(patient => {
-      const url = `/patients/${patient._id}`;
+    //   const url = `/patients/${patient._id}`;
 
       return (
         <tr key={patient._id}>
-          <td><a href={url}>{patient.name}</a></td>
+          <td>{patient.name}</td>
           <td>
             {patient.age}
           </td>
@@ -35,7 +28,7 @@ const renderPatients=()=> {
           </td>
           <td>
             <div className="pull-right">
-            <button 
+            <button disabled
               className="btn btn-danger"
               onClick={() =>onPatientRemove(patient)}>
               Remove
@@ -44,10 +37,26 @@ const renderPatients=()=> {
           </td>
         </tr>
       );
-    });
+    }); 
   }
     // if (!this.props.patients) { return <div data-test="loading-div" className="loading">Loading...</div>; }
     return (
+      <div>
+                  <nav className="navbar navbar-default navbar-static-top">
+            <div className="container">
+              <div className="navbar-header">
+              <a className="navbar-brand" href="/"> <span role="img" aria-lael="house-imoji">&#127968;</span> </a>
+                {/* <a className="navbar-brand" href="/patient">Create Patient</a> */}
+              </div>
+              <div className="navbar-collapse">
+                <ul className="nav navbar-nav navbar-right">
+                  <li>
+    <a href="/login">{props.currentUser?'':'Login'}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
       <table data-test="Patient-table" className="table">
       <thead>
         <tr>
@@ -61,16 +70,10 @@ const renderPatients=()=> {
         {console.log(patients)}
       </tbody>
     </table>
+    </div>
     );
 
 }
-Patients_List.propType={
-  patients:propType.array,
-  loading:propType.bool,
-  patientRemove:propType.func,
-  currentUser:propType.object
-}
-
 export default Patients_List
 
 

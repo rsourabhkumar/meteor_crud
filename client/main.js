@@ -1,9 +1,12 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import ReactDOM from 'react-dom';
-import App from './components/app'
+import { render } from 'react-dom';
 import './main.html'
 
+// add render routes function
+import { renderRoutes } from '../imports/startup/client/routes'
+
+// render routes after DOM has loaded
 Meteor.startup(() => {
-    ReactDOM.render(<App/>, document.querySelector('.render-target'));
-  });
+  render(renderRoutes(), document.querySelector('.render-target'));
+});

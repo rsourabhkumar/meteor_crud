@@ -1,35 +1,51 @@
 import React,{Component} from 'react'
-// import Patients from '../../../imports/collections/patient'
-class Patients_Create extends Component{
-    nameInput=React.createRef();
-    ageInput=React.createRef();
-    diseaseInput=React.createRef();
-    cratePatient=(e)=>{
+import propType from'prop-types'
+import { background } from '@storybook/theming';
+import { color } from '@storybook/addon-knobs';
+
+function Patients_Create(props){
+   let nameInput=React.createRef();
+   let ageInput=React.createRef();
+   let diseaseInput=React.createRef();
+    const cratePatient=(e)=>{
         e.preventDefault()
-        // Patients.insert({
-        //     createdAt:new Date(),
-        //     name:this.nameInput.current.value,
-        //     age:this.ageInput.current.value,
-        // disease:this.diseaseInput.current.value})
-        const name=this.nameInput.current.value
-        const age=this.ageInput.current.value
-        const disease=this.diseaseInput.current.value
-        Meteor.call('patients.insert', name, age,disease);
+        const name=nameInput.current.value
+        const age=ageInput.current.value
+        const disease=diseaseInput.current.value
+        // Meteor.call('patients.insert', name, age,disease);
+        props.cratePatient('patients.insert', name, age,disease);
     }
-    render(){
+   const ClearText=()=>{
+        document.getElementsByName("name")[0].value = ''
+        document.getElementsByName("age")[0].value = ''
+        document.getElementsByName("disease")[0].value = ''
+    }
         return(
-            <div>
-        <form onSubmit={this.cratePatient} className="create-patient">
-            <div>
-            <br/>
-                 Name: <input type="text" name="name" ref={this.nameInput}></input><br/>
-                 Age: <input type="text" name="age" ref={this.ageInput}></input><br/>
-                 Disease: <input type="text" name="disease" ref={this.diseaseInput}></input><br/>
-                 <button type="submit">Create</button>
+            <div className="patient-container">
+           <div className="item">
+           <form onSubmit={cratePatient} className="create-patient">
+            <div className="child-item">         
+                 Name: <input type="text"  name="name" ref={nameInput}></input>
+            </div>
+            <div className="child-item">         
+            Age: <input type="text" name="age" ref={ageInput}></input>
+            </div>
+            <div className="child-item">         
+            Disease: <input type="text" name="disease" ref={diseaseInput}></input>
+            </div>
+            <div className="child-item">         
+            <button data-test="create-button" type="submit">Create</button>
             </div>
         </form> 
-            </div>
+        <button data-test="clear-button" type="submit" onClick={ClearText}>Clear</button>
+        <a href="/" style={{ backgroundColor:"lightred"}} >Close</a>
+        </div>
+    </div>
         )
-    }
 }
+
+Patients_Create.propType={
+    cratePatient:propType.func
+  }
+
 export default Patients_Create
